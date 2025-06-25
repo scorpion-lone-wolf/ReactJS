@@ -1,0 +1,100 @@
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+}
+#root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: blueviolet;
+}
+
+.text-bold {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.profile-card {
+  width: 35%;
+  height: 45%;
+  min-width: 23rem;
+  max-width: 28rem;
+  box-shadow: 6px 6px 75px 18px rgba(232, 157, 250, 0.69);
+  -webkit-box-shadow: 6px 6px 75px 18px rgba(232, 157, 250, 0.69);
+  -moz-box-shadow: 6px 6px 75px 18px rgba(232, 157, 250, 0.69);
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* for upper portion of the card */
+.upper {
+  height: 40%;
+  background-color: aqua;
+  border-radius: 15px 15px 0 0;
+  position: relative;
+}
+
+.avatar-container {
+  width: 30%;
+  aspect-ratio: 1/1;
+  padding: 4px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: aliceblue;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translatex(-50%);
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* for middle portion of the card */
+.middle {
+  height: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: aliceblue;
+}
+
+.middle .description {
+  transform: translateY(50%);
+}
+
+/* for lower portion of the card */
+.lower {
+  height: 25%;
+  border-radius: 0 0 15px 15px;
+  border-top: 1px solid black;
+  background-color: aliceblue;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.lower .followers,
+.lower .likes,
+.lower .photos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
