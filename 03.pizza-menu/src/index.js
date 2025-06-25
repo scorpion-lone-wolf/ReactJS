@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
+import { pizzaData } from "./data";
 // css
 import "./index.css";
 
@@ -16,82 +17,62 @@ function App() {
 function Header() {
   return (
     <header className="header">
-      <h1>Fast React Pizza Co.</h1>;
+      <h1>Fast React Pizza Co.</h1>
     </header>
   );
 }
 
 function Menu() {
+  const numPizzas = pizzaData.length;
   return (
     <main className="menu">
       <h2>Our Menu</h2>
-      <div className="pizzas">
-        <Pizza
-          image={"pizzas/focaccia.jpg"}
-          name={"Pizza Margherita"}
-          ingredients={"Tomato, mozarella, spinach, and ricotta cheese"}
-          price={10}
-        />
-        <Pizza
-          image={"pizzas/focaccia.jpg"}
-          name={"Pizza Margherita"}
-          ingredients={"Tomato, mozarella, spinach, and ricotta cheese"}
-          price={10}
-        />
-        <Pizza
-          image={"pizzas/focaccia.jpg"}
-          name={"Pizza Margherita"}
-          ingredients={"Tomato, mozarella, spinach, and ricotta cheese"}
-          price={10}
-        />
-        <Pizza
-          image={"pizzas/focaccia.jpg"}
-          name={"Pizza Margherita"}
-          ingredients={"Tomato, mozarella, spinach, and ricotta cheese"}
-          price={10}
-        />
-        <Pizza
-          image={"pizzas/focaccia.jpg"}
-          name={"Pizza Margherita"}
-          ingredients={"Tomato, mozarella, spinach, and ricotta cheese"}
-          price={10}
-        />
-        <Pizza
-          image={"pizzas/focaccia.jpg"}
-          name={"Pizza Margherita"}
-          ingredients={"Tomato, mozarella, spinach, and ricotta cheese"}
-          price={10}
-        />
-      </div>
+      {numPizzas > 0 ? (
+        <div className="pizzas">
+          {pizzaData.map(pizza => {
+            return <Pizza key={pizza.name} pizzaObj={pizza} />;
+          })}
+        </div>
+      ) : (
+        <p>We are working on our Menu.. Please Come back later :) </p>
+      )}
     </main>
   );
 }
 
 function Pizza(props) {
   // object destructuring
-  let { image, name, ingredients, price } = props;
+  let { photoName, name, ingredients, price } = props.pizzaObj;
   return (
-    <div className="pizza">
-      <img src={image} alt={name} />
+    <li className="pizza">
+      <img src={photoName} alt={name} />
       <div>
         <h2>{name}</h2>
         <p>{ingredients}</p>
         <span>{price + 30}</span>
       </div>
-    </div>
+    </li>
   );
 }
 
 function Footer() {
   const hour = new Date().getHours();
   const openHour = 12;
-  const closeHour = 13;
+  const closeHour = 15;
   const isOpen = hour >= openHour && hour <= closeHour;
 
-  const currentTime = new Date().toLocaleTimeString();
   return (
     <footer>
-      {currentTime} - {isOpen ? "We are currently open!" : "We are closed!"}
+      {isOpen ? (
+        <div className="order">
+          <p>We're open until {closeHour}:00.Come Visit Us</p>
+          <button className="btn">Order</button>
+        </div>
+      ) : (
+        <p>
+          We are happy to welcome you between {openHour}:00 and {closeHour}:00
+        </p>
+      )}
     </footer>
   );
 }
