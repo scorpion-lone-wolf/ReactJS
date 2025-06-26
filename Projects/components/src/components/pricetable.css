@@ -1,0 +1,58 @@
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+#root {
+  display: flex;
+  justify-content: center;
+  background-color: aqua;
+}
+
+.pricetable {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* pricetable__box */
+.pricetable__box {
+  width: 100%;
+  max-width: 1000px;
+  height: 60%;
+  display: flex;
+  justify-content: space-between;
+}
+.pricetable__standard {
+  width: 33%;
+  height: 95%;
+  background-color: rgba(255, 255, 255, 0.955);
+  border-radius: 12px;
+  box-shadow: -9px 7px 13px -2px rgba(120, 120, 120, 0.68);
+  -webkit-box-shadow: -9px 7px 13px -2px rgba(120, 120, 120, 0.68);
+  -moz-box-shadow: -9px 7px 13px -2px rgba(120, 120, 120, 0.68);
+}
+.pricetable___professional {
+  width: 33%;
+  height: 100%;
+  background-color: rgb(166, 173, 247);
+  border-radius: 12px;
+  border: 5px solid rgb(239, 212, 80);
+}
+.pricetable__master {
+  width: 33%;
+  height: 95%;
+  background-color: rgba(255, 255, 255, 0.955);
+  border-radius: 12px;
+  box-shadow: 12px 8px 13px -2px rgba(120, 120, 120, 0.68);
+  -webkit-box-shadow: 12px 8px 13px -2px rgba(120, 120, 120, 0.68);
+  -moz-box-shadow: 12px 8px 13px -2px rgba(120, 120, 120, 0.68);
+}
