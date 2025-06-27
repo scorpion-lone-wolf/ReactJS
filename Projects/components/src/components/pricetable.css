@@ -31,46 +31,33 @@ body,
   display: flex;
   justify-content: space-between;
 }
-.switch {
-  margin-left: 20px;
-  margin-right: 20px;
+
+.pricetable__toggle {
+  margin: 0 10px 0 10px;
+  width: 70px;
+  height: 30px;
+  border-radius: 20px;
   position: relative;
-  width: 60px;
-  height: 28px;
+  /* background-color: bisque; */
 }
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+.pricetable__switch {
+  position: relative;
+  display: inline-block;
+  border-radius: 50%;
+  background-color: rgb(209, 193, 193);
+  width: 24px;
+  height: 24px;
+  top: 0px;
+  left: -18px;
+  transition: 0.4s;
 }
-.slider {
-  position: absolute;
-  cursor: pointer;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 28px;
+.toggle {
+  transform: translateX(35px);
+}
+.toggle-color {
   background-color: rgb(166, 173, 247);
 }
-.slider::before {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  background-color: white;
-  height: 22px;
-  width: 22px;
-  transition: 0.4s;
-  border-radius: 50%;
-}
 
-.switch input:checked + .slider {
-  background-color: rgb(231, 219, 219);
-}
-.switch input:checked + .slider::before {
-  transform: translateX(32px);
-}
 /* pricetable__box */
 .pricetable__box {
   width: 100%;
@@ -89,7 +76,7 @@ body,
   -webkit-box-shadow: -9px 7px 13px -2px rgba(120, 120, 120, 0.68);
   -moz-box-shadow: -9px 7px 13px -2px rgba(120, 120, 120, 0.68);
 }
-.pricetable___professional {
+.pricetable__professional {
   width: 33%;
   background-color: rgb(166, 173, 247);
   border-radius: 12px;

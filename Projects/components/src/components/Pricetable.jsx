@@ -8,26 +8,20 @@ const Pricetable = () => {
       <div className="pricetable__top">
         <h1>Our Pricing</h1>
         <div className="pricetable__season">
-          <span>Anually</span>
-          <label className="switch">
-            <input
-              type="checkbox"
-              id="toggle"
-              checked={isOn}
-              onChange={() => {
-                console.log("The toogle is ", isOn);
-                setIsOn(!isOn);
-              }}
-            />
-            <span className="slider"></span>
-          </label>
+          <span>Annually</span>
+          <button
+            className={`pricetable__toggle ${isOn ? "toggle-color" : ""}`}
+            onClick={() => setIsOn(!isOn)}
+          >
+            <span className={`pricetable__switch ${isOn ? "toggle" : ""}`}></span>
+          </button>
           <span>Monthly</span>
         </div>
       </div>
       <div className="pricetable__box">
-        <div className="pricetable__standard"></div>
-        <div className="pricetable___professional"></div>
-        <div className="pricetable__master"></div>
+        <div className="pricetable__standard">Standard</div>
+        <div className="pricetable__professional">Professional</div> {/* ✅ fixed */}
+        <div className="pricetable__master">Master</div>
       </div>
     </div>
   );
