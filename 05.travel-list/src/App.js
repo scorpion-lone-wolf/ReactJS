@@ -1,18 +1,34 @@
 import { useState } from "react";
 import "./index.css";
 
-const initialItems = [
-  { id: 1, description: "Passports", quantity: 2, packed: false },
-  { id: 2, description: "Socks", quantity: 12, packed: false },
-];
-
 function App() {
+  const [items, setItems] = useState([]);
+  function handleAddItem(item) {
+    setItems(items => [...items, item]);
+  }
+  function handleDeleteItem(id) {
+    setItems(items => items.filter(item => item.id !== id));
+  }
+  function handleToggleItem(id) {
+    setItems(items => {
+      return items.map(item => {
+        if (item.id === id) {
+          return { ...item, packed: !item.packed };
+        }
+        return item;
+      });
+    });
+  }
   return (
     <div className="app">
       <Logo />
-      <Form />
-      <PackagingList />
-      <Stats />
+      <Form onAddItem={handleAddItem} />
+      <PackagingList
+        items={items}
+        onItemDelete={handleDeleteItem}
+        onItemToggle={handleToggleItem}
+      />
+      <Stats items={items} />
     </div>
   );
 }
@@ -25,29 +41,32 @@ function Logo() {
 }
 
 // form component
-function Form() {
+function Form({ onAddItem }) {
   const [count, setCount] = useState(1);
-  const [item, setItem] = useState("");
+  const [description, setDescription] = useState("");
+
   function handleSubmit(event) {
+    //validate that items is not empty
     event.preventDefault();
+    if (description === "") return;
     const newItem = {
-      id: initialItems.length,
-      description: item,
+      id: Date.now(),
+      description,
       quantity: count,
       packed: false,
     };
-    initialItems.push(newItem);
+    onAddItem(newItem);
     setCount(1);
-    setItem("");
+    setDescription("");
   }
-  console.log(initialItems);
+
   return (
     <form className="add-form" onSubmit={e => handleSubmit(e)}>
       <h3>What do ypu need for your 😍 trip?</h3>
       <select
         value={count}
         onChange={e => {
-          setCount(e.target.value);
+          setCount(+e.target.value);
         }}
       >
         {new Array(20).fill(null).map((_, i) => (
@@ -57,9 +76,9 @@ function Form() {
       <input
         type="text"
         placeholder="Items..."
-        value={item}
+        value={description}
         onChange={e => {
-          setItem(e.target.value);
+          setDescription(e.target.value);
         }}
       />
       <button>Add</button>
@@ -68,41 +87,56 @@ function Form() {
 }
 
 // packaging-list component
-function PackagingList() {
+function PackagingList({ items, onItemDelete, onItemToggle }) {
   return (
     <div className="list">
       <ul>
-        {initialItems.map(item => (
-          <Item item={item} key={item.id} />
+        {items.map(item => (
+          <Item item={item} key={item.id} onItemDelete={onItemDelete} onItemToggle={onItemToggle} />
         ))}
       </ul>
     </div>
   );
 }
-function Item({ item }) {
-  const [isChecked, setIsChecked] = useState(item.packed);
+function Item({ item, onItemDelete, onItemToggle }) {
   return (
     <li className="item">
       <input
         type="checkbox"
-        checked={isChecked}
+        checked={item.packed}
         onChange={() => {
-          setIsChecked(prev => !prev);
+          onItemToggle(item.id);
         }}
       />
-      <span style={isChecked ? { textDecoration: "line-through" } : {}}>
+      <span style={item.packed ? { textDecoration: "line-through" } : {}}>
         {item.quantity} {item.description}
       </span>
-      <button>❌</button>
+      <button
+        onClick={() => {
+          onItemDelete(item.id);
+        }}
+      >
+        ❌
+      </button>
     </li>
   );
 }
 
 // stats component
-function Stats() {
+function Stats({ items }) {
+  const numItems = items.length;
+  const numPackedItems = items.reduce((acc, item) => {
+    if (item.packed) acc++;
+    return acc;
+  }, 0);
+  const packedPercentage = numItems > 0 ? Math.round((numPackedItems / numItems) * 100) : 0;
   return (
     <footer className="stats">
-      <em>You have X items on your list, and you already packed X (X%)</em>
+      <em>
+        {packedPercentage !== 100
+          ? `You have ${numItems} items on your list, and you already packed ${numPackedItems} (${packedPercentage}%)`
+          : "You got everything! Ready to go ✈️"}
+      </em>
     </footer>
   );
 }
