@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./app.css";
+
 function App() {
   const [currentActive, setCurrentActive] = useState(1);
   const [isOpen, setIsOpen] = useState(true);
@@ -16,6 +17,14 @@ function App() {
       setCurrentActive(prevValue => prevValue + 1);
     }
   }
+
+  // If we want to access any files from public we should do like this. Treat public like cdn
+  fetch("/manifest.json")
+    .then(response => response.json())
+    .then(manifest => {
+      console.log(manifest);
+    });
+
   return (
     <div className="container">
       <button className="close" onClick={() => setIsOpen(prev => !prev)}>
