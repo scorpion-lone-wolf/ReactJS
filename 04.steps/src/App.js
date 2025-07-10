@@ -4,6 +4,18 @@ function App() {
   const [currentActive, setCurrentActive] = useState(1);
   const [isOpen, setIsOpen] = useState(true);
   const messages = ["Learn React", "Build Projects", "Deploy your Projects"];
+
+  function handlePrevious() {
+    if (currentActive !== 1) {
+      setCurrentActive(prevValue => prevValue - 1);
+    }
+  }
+
+  function handleNext() {
+    if (currentActive !== 3) {
+      setCurrentActive(prevValue => prevValue + 1);
+    }
+  }
   return (
     <div className="container">
       <button className="close" onClick={() => setIsOpen(prev => !prev)}>
@@ -16,28 +28,14 @@ function App() {
             <div className={`two ${currentActive >= 2 ? "active" : ""}`}>2</div>
             <div className={`three ${currentActive >= 3 ? "active" : ""}`}>3</div>
           </div>
-          <p className="messages">
-            Step {currentActive} : {messages[currentActive - 1]}
-          </p>
+          <StepMessage step={currentActive}>{messages[currentActive - 1]}</StepMessage>
           <div className="buttons">
-            <button
-              onClick={() => {
-                if (currentActive !== 1) {
-                  setCurrentActive(prevValue => prevValue - 1);
-                }
-              }}
-            >
-              Previous
-            </button>
-            <button
-              onClick={() => {
-                if (currentActive !== 3) {
-                  setCurrentActive(prevValue => prevValue + 1);
-                }
-              }}
-            >
-              Next
-            </button>
+            <Button onClick={handlePrevious}>
+              <span>👈</span> Previous
+            </Button>
+            <Button onClick={handleNext}>
+              Next <span>👉</span>
+            </Button>
           </div>
         </div>
       )}
@@ -46,3 +44,16 @@ function App() {
 }
 
 export default App;
+
+function StepMessage({ step, children }) {
+  return (
+    <div className="messages">
+      <h3>Step {step}</h3>
+      {children}
+    </div>
+  );
+}
+
+function Button({ onClick, children }) {
+  return <button onClick={onClick}>{children}</button>;
+}
