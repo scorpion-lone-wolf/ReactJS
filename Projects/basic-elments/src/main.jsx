@@ -1,10 +1,11 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import Pricetable from "./components/Pricetable";
+import DragNDrop from "./components/DragNDrop";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     {/* <ProfileCard /> */}
-    <Pricetable />
+    {/* <Pricetable /> */}
+    <DragNDrop />
   </StrictMode>
 );
