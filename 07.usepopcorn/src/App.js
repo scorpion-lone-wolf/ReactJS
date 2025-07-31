@@ -52,16 +52,33 @@ const average = arr => arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 
 export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const apiKey = "5db7449e";
   let searchParam = "interstellar";
   useEffect(() => {
-    fetch(`https://www.omdbapi.com/?apikey=${apiKey}&s=${searchParam}`)
-      .then(res => res.json())
-      .then(data => {
-        console.log(data.Search);
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const res = await fetch(`https://www.omdbapi.com/?apikey=${apiKey}&s=${searchParam}`);
+        const data = await res.json();
+
+        if (data.Response === "False") throw new Error("Movie not found");
+
         setMovies(data.Search);
-      });
+
+        setIsLoading(false);
+        setError(null);
+      } catch (error) {
+        console.log("my error :", error.message);
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
   }, []);
+
   return (
     <>
       <NavBar>
@@ -69,7 +86,13 @@ export default function App() {
       </NavBar>
       <Main>
         <Box movies={movies}>
-          <MovieList movies={movies} />
+          {isLoading ? (
+            <Loader />
+          ) : error ? (
+            <ErrorMessage message={error} />
+          ) : (
+            <MovieList movies={movies} />
+          )}
         </Box>
         <Box>
           <WatchedSummary watched={watched} />
@@ -80,6 +103,18 @@ export default function App() {
   );
 }
 
+function Loader() {
+  return <p className="loader">Loading...</p>;
+}
+
+function ErrorMessage({ message }) {
+  return (
+    <p className="error">
+      <span>🛑</span>
+      {message}
+    </p>
+  );
+}
 // ✅ we used component composition -> so that we don't have to pass props and avoid prop drilling problem
 function NavBar({ children }) {
   return (
