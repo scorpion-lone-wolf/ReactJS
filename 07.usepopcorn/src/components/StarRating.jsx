@@ -76,9 +76,9 @@ function Start({ onRate, isFull, onMouseEnter, onMouseLeave, fillColor, size }) 
             d="M12 2L9.09 8.5H2.83L7.83 12.59L5.91 18.5L12 15.59L18.09 18.5L16.17 12.59L21.17 8.5H14.91L12 2Z"
             fill={fillColor}
             stroke={fillColor}
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       ) : (
@@ -86,9 +86,9 @@ function Start({ onRate, isFull, onMouseEnter, onMouseLeave, fillColor, size }) 
           <path
             d="M12 2L9.09 8.5H2.83L7.83 12.59L5.91 18.5L12 15.59L18.09 18.5L16.17 12.59L21.17 8.5H14.91L12 2Z"
             stroke={fillColor}
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       )}
