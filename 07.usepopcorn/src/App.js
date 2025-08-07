@@ -15,7 +15,10 @@ export const apiKey = "5db7449e";
 
 export default function App() {
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
+  const [watched, setWatched] = useState(() => {
+    // fetching data from local stoage (lazy evaluation of state)
+    return JSON.parse(localStorage.getItem("watched"));
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -36,8 +39,16 @@ export default function App() {
 
   function handleAddWatched(movie) {
     setWatched(watched => [...watched, movie]);
+    // adding watched array data into local storage
+    // localStorage.setItem("watched", JSON.stringify([...watched, movie]));
   }
-
+  useEffect(
+    function () {
+      // adding watched array data into local storage
+      localStorage.setItem("watched", JSON.stringify([...watched]));
+    },
+    [watched]
+  );
   useEffect(() => {
     // create a controller instance
     const controller = new AbortController();
