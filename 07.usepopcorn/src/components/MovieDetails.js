@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { apiKey } from "../App";
+import { useKey } from "../custom-hook/useKey";
 import { Loader } from "./Loader";
 import StarRating from "./StarRating";
 
@@ -7,6 +8,8 @@ export function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }
   const [selectedMovieDetails, setSelectedMovieDetails] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [userRating, setUserRating] = useState(0);
+
+  useKey("Escape", onCloseMovie);
 
   // check if the particluar imdbID is already in watchedmovie or not
   const isWatched = watched.filter(movie => movie.imdbID === selectedId).length > 0;
@@ -60,17 +63,6 @@ export function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }
       document.title = "usePopcorn";
     };
   }, [title]);
-
-  useEffect(() => {
-    function callback(e) {
-      if (e.code === "Escape") onCloseMovie();
-      console.log("Closing");
-    }
-    document.addEventListener("keydown", callback);
-    return () => {
-      document.removeEventListener("keydown", callback);
-    };
-  }, [onCloseMovie]);
 
   return isLoading ? (
     <Loader />
