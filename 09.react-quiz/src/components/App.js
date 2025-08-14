@@ -1,13 +1,17 @@
 import { useEffect, useReducer } from "react";
 import Error from "./Error";
 import FinishScreen from "./FinishScreen";
+import Footer from "./Footer";
 import Header from "./Header";
 import Loader from "./Loader";
 import Main from "./Main";
+import NextButton from "./NextButton";
 import Progress from "./Progress";
 import Question from "./Question";
 import StartScreen from "./StartScreen";
+import Timer from "./Timer";
 
+const SEC_PER_QUESTION = 30;
 const initialState = {
   questions: [],
   // "loading" ,"error" ,"ready" ,'active'(when quiz is running), "finished" (when quiz is finished)
@@ -16,6 +20,7 @@ const initialState = {
   points: 0,
   answer: null,
   highestScore: 0,
+  secondRemaining: 10,
 };
 function reducer(state, action) {
   const { type, payload } = action;
@@ -25,7 +30,11 @@ function reducer(state, action) {
     case "dataFailed":
       return { ...state, status: "error" };
     case "startGame":
-      return { ...state, status: "active" };
+      return {
+        ...state,
+        status: "active",
+        secondRemaining: state.questions.length * SEC_PER_QUESTION,
+      };
     case "nextQuestion":
       if (state.index === state.questions.length - 1) {
         return {
@@ -49,7 +58,22 @@ function reducer(state, action) {
             : state.points,
       };
     case "restart":
-      return { ...state, status: "ready", index: 0, points: 0, answer: null };
+      return {
+        ...state,
+        status: "ready",
+        index: 0,
+        points: 0,
+        answer: null,
+        secondRemaining: state.questions.length * SEC_PER_QUESTION,
+      };
+    case "tick":
+      return {
+        ...state,
+        secondRemaining: state.secondRemaining - 1,
+        status: state.secondRemaining === 0 ? "finished" : state.status,
+        answer: null,
+        highestScore: state.points > state.highestScore ? state.points : state.highestScore,
+      };
     default:
       throw new Error("Unknown action");
   }
@@ -57,7 +81,7 @@ function reducer(state, action) {
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { questions, status, index, points, answer, highestScore } = state;
+  const { questions, status, index, points, answer, highestScore, secondRemaining } = state;
   const qustionsLength = questions.length;
   const maxPossiblePoints = questions.reduce((prevValue, currValue) => {
     return prevValue + currValue.points;
@@ -97,6 +121,11 @@ function App() {
               points={points}
               dispatch={dispatch}
             />
+
+            <Footer>
+              <Timer dispatch={dispatch} secondRemaining={secondRemaining} />
+              {answer !== null && <NextButton dispatch={dispatch} />}
+            </Footer>
           </>
         )}
         {status === "finished" && (
