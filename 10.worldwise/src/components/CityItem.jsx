@@ -2,10 +2,11 @@ import { Link } from "react-router-dom";
 import styles from "./CityItem.module.css";
 
 function CityItem({ city }) {
-  const { cityName, emoji, date, id } = city;
+  const { cityName, emoji, date, id, position } = city;
+  const { lat, lng } = position;
   return (
     <li>
-      <Link to={`${id}`} className={styles.cityItem}>
+      <Link to={`${id}?lat=${lat}&lng=${lng}`} className={styles.cityItem}>
         <span className={styles.emoji}>{emoji}</span>
         <span className={styles.name}>{cityName}</span>
         <span className={styles.date}>({formatDate(date)})</span>
