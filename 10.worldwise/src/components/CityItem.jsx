@@ -1,12 +1,20 @@
 import { Link } from "react-router-dom";
+import useCities from "../hooks/useCities";
 import styles from "./CityItem.module.css";
 
 function CityItem({ city }) {
+  const { currentCityData } = useCities();
   const { cityName, emoji, date, id, position } = city;
   const { lat, lng } = position;
+
   return (
     <li>
-      <Link to={`${id}?lat=${lat}&lng=${lng}`} className={styles.cityItem}>
+      <Link
+        to={`${id}?lat=${lat}&lng=${lng}`}
+        className={`${styles.cityItem} ${
+          currentCityData.id === id ? styles["cityItem--active"] : ""
+        }`}
+      >
         <span className={styles.emoji}>{emoji}</span>
         <span className={styles.name}>{cityName}</span>
         <span className={styles.date}>({formatDate(date)})</span>

@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-import { useNavigate } from "react-router-dom";
 import Button from "./Button";
+import ButtonBack from "./Buttonback";
 import styles from "./Form.module.css";
 
 export function convertToEmoji(countryCode) {
@@ -20,12 +20,6 @@ function Form() {
   const [date, setDate] = useState(new Date());
   const [notes, setNotes] = useState("");
 
-  const navigate = useNavigate();
-
-  function navigateBack(e) {
-    e.preventDefault();
-    navigate(-1);
-  }
   return (
     <form className={styles.form}>
       <div className={styles.row}>
@@ -46,9 +40,7 @@ function Form() {
 
       <div className={styles.buttons}>
         <Button type="primary">Add</Button>
-        <Button type="back" onClick={e => navigateBack(e)}>
-          &larr;Back
-        </Button>
+        <ButtonBack />
       </div>
     </form>
   );
