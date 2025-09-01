@@ -10,6 +10,7 @@ const CityList = () => {
   if (isLoading) {
     return <Spinner />;
   }
+
   if (cities.length == 0) {
     return <Message message="Add you first city by clicking on the map" />;
   }

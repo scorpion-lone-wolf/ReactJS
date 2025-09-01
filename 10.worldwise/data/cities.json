@@ -1,63 +1,15 @@
 {
   "cities": [
     {
-      "cityName": "Lisbon",
-      "country": "Portugal",
-      "emoji": "🇵🇹",
-      "date": "2027-10-31T15:59:59.138Z",
-      "notes": "My favorite city so far!",
-      "position": {
-        "lat": 38.727881642324164,
-        "lng": -9.140900099907554
-      },
-      "id": "73930385"
-    },
-    {
-      "cityName": "Madrid",
+      "id": "59a9",
+      "cityName": "Trillo",
       "country": "Spain",
       "emoji": "🇪🇸",
-      "date": "2027-07-15T08:22:53.976Z",
-      "notes": "",
+      "date": "2025-09-01T05:13:58.906Z",
+      "notes": "jb",
       "position": {
-        "lat": 40.46635901755316,
-        "lng": -3.7133789062500004
-      },
-      "id": "17806751"
-    },
-    {
-      "cityName": "Berlin",
-      "country": "Germany",
-      "emoji": "🇩🇪",
-      "date": "2027-02-12T09:24:11.863Z",
-      "notes": "Amazing 😃",
-      "position": {
-        "lat": 52.53586782505711,
-        "lng": 13.376933665713324
-      },
-      "id": "98443197"
-    },
-    {
-      "id": "d635",
-      "cityName": "Chhapara",
-      "country": "India",
-      "emoji": "🇮🇳",
-      "date": "2025-08-31T10:37:23.168Z",
-      "notes": "bihari",
-      "position": {
-        "lat": "22.43134015636062",
-        "lng": "79.36523437500001"
-      }
-    },
-    {
-      "id": "6996",
-      "cityName": "Valle de Cerrato",
-      "country": "Spain",
-      "emoji": "🇪🇸",
-      "date": "2025-08-31T10:53:40.993Z",
-      "notes": "dsda",
-      "position": {
-        "lat": "41.902277040963696",
-        "lng": "-4.339599609375001"
+        "lat": "40.70562793820592",
+        "lng": "-2.6257324218750004"
       }
     }
   ]
