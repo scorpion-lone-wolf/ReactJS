@@ -3,6 +3,7 @@ import City from "./components/City";
 import CityList from "./components/CityList";
 import CountryList from "./components/CountryList";
 import Form from "./components/Form";
+import { AuthProvider } from "./contexts/AuthContext";
 import { CitiesProvider } from "./contexts/CitiesContext";
 import AppLayout from "./pages/AppLayout";
 import Homepage from "./pages/Homepage";
@@ -12,27 +13,29 @@ import Pricing from "./pages/Pricing";
 import Product from "./pages/Product";
 function App() {
   return (
-    <CitiesProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route index element={<Homepage />} />
-          <Route path="product" element={<Product />} />
-          <Route path="pricing" element={<Pricing />} />
-          <Route path="login" element={<Login />} />
-          <Route path="app" element={<AppLayout />}>
-            {/* This is an index route */}
-            <Route index element={<Navigate to="cities" replace />} />
-            {/* This are nested routes */}
-            <Route path="cities" element={<CityList />} />
-            {/* create a dynamic route */}
-            <Route path="cities/:id" element={<City />} />
-            <Route path="countries" element={<CountryList />} />
-            <Route path="form" element={<Form />} />
-          </Route>
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </CitiesProvider>
+    <AuthProvider>
+      <CitiesProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route index element={<Homepage />} />
+            <Route path="product" element={<Product />} />
+            <Route path="pricing" element={<Pricing />} />
+            <Route path="login" element={<Login />} />
+            <Route path="app" element={<AppLayout />}>
+              {/* This is an index route */}
+              <Route index element={<Navigate to="cities" replace />} />
+              {/* This are nested routes */}
+              <Route path="cities" element={<CityList />} />
+              {/* create a dynamic route */}
+              <Route path="cities/:id" element={<City />} />
+              <Route path="countries" element={<CountryList />} />
+              <Route path="form" element={<Form />} />
+            </Route>
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </CitiesProvider>
+    </AuthProvider>
   );
 }
 export default App;
