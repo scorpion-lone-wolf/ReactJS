@@ -1,14 +1,14 @@
-import { createStore } from "redux";
+import { combineReducers, legacy_createStore as createStore } from "redux";
 
-// Step 1 : Create Initial State
-const initialState = {
+//  Create Initial State
+const initialStateAccount = {
   balance: 0,
   loan: 0,
   loanPurpose: "",
 };
 
-// Step 2: Create a reducer function which return the new State
-function reducer(state = initialState, action) {
+//  Create a reducer function which return the new State
+function accountReducer(state = initialStateAccount, action) {
   switch (action.type) {
     case "account/deposit":
       return { ...state, balance: state.balance + action.payload };
@@ -29,10 +29,37 @@ function reducer(state = initialState, action) {
   }
 }
 
-// Step 3 : Create a store
-const store = createStore(reducer);
+const initialStateCustomer = {
+  fullName: "",
+  nationalID: "",
+  createdAt: "",
+};
+function customerReducer(state = initialStateCustomer, action) {
+  switch (action.type) {
+    case "customer/createCustomer":
+      return {
+        ...state,
+        fullName: action.payload.fullName,
+        nationalID: action.payload.nationalID,
+        createdAt: action.payload.createdAt,
+      };
+    case "customer/updateName":
+      return { ...state, fullName: action.payload };
+    default:
+      return state;
+  }
+}
 
-// Step 4 : Create an Action Creators
+// combine reducer
+const rootReducer = combineReducers({
+  account: accountReducer,
+  customer: customerReducer,
+});
+
+//  Create a store
+const store = createStore(rootReducer);
+
+//  Create an Action Creators
 function deposit(amount) {
   return { type: "account/deposit", payload: amount };
 }
@@ -52,7 +79,7 @@ function payLoan() {
   return { type: "account/payLoan" };
 }
 
-// Step 5 : Dispatch the Actions with Action Creator fn
+// Dispatch the Actions with Action Creator fn
 store.dispatch(deposit(500));
 console.log(store.getState());
 
@@ -63,4 +90,27 @@ store.dispatch(requestLoan(15000, "Buy a House"));
 console.log(store.getState());
 
 store.dispatch(payLoan());
+console.log(store.getState());
+
+// action creators
+function createCustomer(fullName, nationalID) {
+  return {
+    type: "customer/createCustomer",
+    payload: {
+      fullName: fullName,
+      nationalID: nationalID,
+      createdAt: new Date().toISOString(),
+    },
+  };
+}
+
+function updateName(fullName) {
+  return { type: "customer/updateName", payload: fullName };
+}
+
+//dispatch customer actions
+store.dispatch(createCustomer("Rahul", "IND1234"));
+console.log(store.getState());
+
+store.dispatch(updateName("Pursotam"));
 console.log(store.getState());
