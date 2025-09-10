@@ -14,8 +14,9 @@ const SearchQuery = () => {
   return (
     <form onSubmit={e => handleSubmit(e)}>
       <input
+        className="bg-stone-100"
         type="text"
-        placeholder="enter order #"
+        placeholder="Search order #"
         name="search"
         value={query}
         onChange={e => {
