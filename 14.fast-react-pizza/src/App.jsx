@@ -1,4 +1,10 @@
-import { createBrowserRouter, data, Navigate, redirect, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  data,
+  Navigate,
+  redirect,
+  RouterProvider,
+} from "react-router-dom";
 import Cart from "./features/cart/Cart";
 import Menu from "./features/menu/Menu";
 import CreateOrder, { isValidPhone } from "./features/order/CreateOrder";
