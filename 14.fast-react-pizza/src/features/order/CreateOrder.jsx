@@ -1,5 +1,5 @@
 import { Form, useActionData, useNavigation } from "react-router-dom";
-
+import Button from "../../ui/Button";
 // https://uibakery.io/regex-library/phone-number
 // eslint-disable-next-line react-refresh/only-export-components
 export const isValidPhone = (str) =>
@@ -34,51 +34,63 @@ const fakeCart = [
 function CreateOrder() {
   // const [withPriority, setWithPriority] = useState(false);
   const navigation = useNavigation();
-  const formData = useActionData();
+  const formErrors = useActionData();
   const cart = fakeCart;
   const isSubmitting = navigation.state === "submitting";
 
-  console.log(formData);
   return (
-    <div>
-      <h2>Ready to order? Let's go!</h2>
+    <div className="px-4 py-6">
+      <h2 className="mb-8 text-xl font-semibold">Ready to order? Let's go!</h2>
 
       <Form method="post" action="/order/new">
-        <div>
-          <label>First Name</label>
-          <input type="text" name="customer" required className="bg-white" />
-        </div>
-
-        <div>
-          <label>Phone number</label>
-          <div>
-            <input type="tel" name="phone" required className="bg-white" />
-          </div>
-          {formData?.phone && <p>{formData.phone}</p>}
-        </div>
-
-        <div>
-          <label>Address</label>
-          <div>
+        <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center">
+          <label className="sm:basis-40">First Name</label>
+          <div className="grow">
             <input
               type="text"
-              name="address"
+              name="customer"
               required
-              className="focus:ring- w-full rounded-full border border-stone-200 px-4 py-2 transition-all duration-300 focus:ring focus:ring-yellow-400 focus:outline-none md:px-6 md:py-4"
+              className="input w-full"
             />
           </div>
         </div>
 
-        <div>
+        <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center">
+          <label className="sm:basis-40">Phone number</label>
+          <div className="grow">
+            <input className="input w-full" type="tel" name="phone" required />
+          </div>
+          {formErrors?.phone && (
+            <p className="mt-2 rounded-md bg-red-100 p-2 text-xs text-red-700">
+              {formErrors.phone}
+            </p>
+          )}
+        </div>
+
+        <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center">
+          <label className="sm:basis-40">Address</label>
+          <div className="grow">
+            <input
+              type="text"
+              name="address"
+              required
+              className="input w-full"
+            />
+          </div>
+        </div>
+
+        <div className="mb-12 flex items-center gap-5">
           <input
+            className="h-6 w-6 accent-yellow-400 focus:ring focus:ring-yellow-400 focus:ring-offset-2 focus:outline-none"
             type="checkbox"
             name="priority"
             id="priority"
-            className="h-6 w-6 accent-yellow-400 focus:ring focus:ring-yellow-400 focus:ring-offset-2 focus:outline-none"
             // value={withPriority}
             // onChange={(e) => setWithPriority(e.target.checked)}
           />
-          <label htmlFor="priority">Want to yo give your order priority?</label>
+          <label className="font-medium" htmlFor="priority">
+            Want to yo give your order priority?
+          </label>
         </div>
 
         <div>
@@ -88,12 +100,9 @@ function CreateOrder() {
             value={JSON.stringify(cart)}
             className="bg-white"
           />
-          <button
-            disabled={isSubmitting}
-            className="rounded-full bg-yellow-400 px-4 py-3 font-semibold tracking-wide text-stone-800 uppercase transition-colors duration-300 hover:bg-yellow-300 focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed"
-          >
+          <Button type="primary" disabled={isSubmitting}>
             {isSubmitting ? "placing order" : "Order now"}
-          </button>
+          </Button>
         </div>
       </Form>
     </div>
