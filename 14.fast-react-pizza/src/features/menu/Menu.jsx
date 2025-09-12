@@ -3,7 +3,6 @@ import MenuItem from "./MenuItem";
 
 function Menu() {
   const { menuData } = useLoaderData();
-  console.log(menuData);
 
   return (
     <ul className="divide-y divide-stone-300">

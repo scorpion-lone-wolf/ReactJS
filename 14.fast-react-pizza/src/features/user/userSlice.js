@@ -1,3 +1,4 @@
+/*
 function getPosition() {
   return new Promise(function (resolve, reject) {
     navigator.geolocation.getCurrentPosition(resolve, reject);
@@ -19,3 +20,27 @@ async function fetchAddress() {
   // 3) Then we return an object with the data that we are interested in
   return { position, address };
 }
+*/
+
+import { createSlice } from "@reduxjs/toolkit";
+
+// slice has initalValue , reducerfn and actionCreatorfn
+const initialState = {
+  userName: "",
+};
+
+const userSlice = createSlice({
+  name: "user",
+  initialState,
+  reducers: {
+    updateName: (state, action) => {
+      // we can mutate the state becuase it will latter use Immer library to make it new State
+      state.userName = action.payload;
+    },
+  },
+});
+
+// reducers
+export default userSlice.reducer;
+// actionCreators
+export const { updateName } = userSlice.actions;

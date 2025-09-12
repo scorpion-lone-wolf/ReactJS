@@ -1,12 +1,12 @@
 // Test ID: IIDSAT
 
 import { useLoaderData } from "react-router-dom";
-import OrderItem from "../../../../../ultimate-react-course/16-fast-react-pizza/final-1-after-tailwind/src/features/order/OrderItem";
 import {
   calcMinutesLeft,
   formatCurrency,
   formatDate,
 } from "../../utils/helpers";
+import OrderItem from "./OrderItem";
 
 function Order() {
   // Everyone can search for all orders, so for privacy reasons we're gonna gonna exclude names or address, these are only for the restaurant staff

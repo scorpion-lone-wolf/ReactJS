@@ -10,7 +10,9 @@ import Menu from "./features/menu/Menu";
 import CreateOrder, { isValidPhone } from "./features/order/CreateOrder";
 import Order from "./features/order/Order";
 
+import { Provider } from "react-redux";
 import { createOrder, getMenu, getOrder } from "./services/apiRestaurant";
+import { store } from "./store";
 import AppLayout from "./ui/AppLayout";
 import Error from "./ui/Error";
 import Home from "./ui/Home";
@@ -52,7 +54,6 @@ let router = createBrowserRouter([
             path: "new",
             element: <CreateOrder />,
             action: async ({ request }) => {
-              console.log("creaet order");
               const formData = await request.formData();
               const data = Object.fromEntries(formData);
               const order = {
@@ -86,7 +87,11 @@ let router = createBrowserRouter([
 ]);
 function App() {
   // create RouterProvider component to manage this routes
-  return <RouterProvider router={router} />;
+  return (
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  );
 }
 
 export default App;
