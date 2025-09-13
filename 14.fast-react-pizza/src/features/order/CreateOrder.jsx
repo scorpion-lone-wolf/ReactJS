@@ -1,6 +1,10 @@
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Form, useActionData, useNavigation } from "react-router-dom";
 import Button from "../../ui/Button";
+import { formatCurrency } from "../../utils/helpers";
+import EmptyCart from "../cart/EmptyCart";
+import { getTotalCartQuantityAndPrice } from "../cart/cartSlice";
 // https://uibakery.io/regex-library/phone-number
 // eslint-disable-next-line react-refresh/only-export-components
 export const isValidPhone = (str) =>
@@ -8,38 +12,17 @@ export const isValidPhone = (str) =>
     str,
   );
 
-const fakeCart = [
-  {
-    pizzaId: 12,
-    name: "Mediterranean",
-    quantity: 2,
-    unitPrice: 16,
-    totalPrice: 32,
-  },
-  {
-    pizzaId: 6,
-    name: "Vegetale",
-    quantity: 1,
-    unitPrice: 13,
-    totalPrice: 13,
-  },
-  {
-    pizzaId: 11,
-    name: "Spinach and Mushroom",
-    quantity: 1,
-    unitPrice: 15,
-    totalPrice: 15,
-  },
-];
-
 function CreateOrder() {
-  // const [withPriority, setWithPriority] = useState(false);
+  const [withPriority, setWithPriority] = useState(false);
   const navigation = useNavigation();
   const formErrors = useActionData();
   const userName = useSelector((state) => state.user.userName);
-  const cart = fakeCart;
+  const { totalPrice } = useSelector(getTotalCartQuantityAndPrice);
+  const cart = useSelector((state) => state.cart.cart);
   const isSubmitting = navigation.state === "submitting";
-
+  const priorityPrice = withPriority ? totalPrice * 0.2 : 0;
+  const finalPrice = totalPrice + priorityPrice;
+  if (!cart.length) return <EmptyCart />;
   return (
     <div className="px-4 py-6">
       <h2 className="mb-8 text-xl font-semibold">Ready to order? Let's go!</h2>
@@ -88,8 +71,8 @@ function CreateOrder() {
             type="checkbox"
             name="priority"
             id="priority"
-            // value={withPriority}
-            // onChange={(e) => setWithPriority(e.target.checked)}
+            value={withPriority}
+            onChange={(e) => setWithPriority(e.target.checked)}
           />
           <label className="font-medium" htmlFor="priority">
             Want to yo give your order priority?
@@ -104,7 +87,9 @@ function CreateOrder() {
             className="bg-white"
           />
           <Button type="primary" disabled={isSubmitting}>
-            {isSubmitting ? "placing order" : "Order now"}
+            {isSubmitting
+              ? "placing order"
+              : `Order now ${formatCurrency(finalPrice)}`}
           </Button>
         </div>
       </Form>

@@ -11,6 +11,7 @@ import CreateOrder, { isValidPhone } from "./features/order/CreateOrder";
 import Order from "./features/order/Order";
 
 import { Provider } from "react-redux";
+import { clearCart } from "./features/cart/cartSlice";
 import { createOrder, getMenu, getOrder } from "./services/apiRestaurant";
 import { store } from "./store";
 import AppLayout from "./ui/AppLayout";
@@ -58,7 +59,7 @@ let router = createBrowserRouter([
               const data = Object.fromEntries(formData);
               const order = {
                 ...data,
-                priority: data.priority === "on",
+                priority: data.priority === "true",
                 cart: JSON.parse(data.cart),
               };
               const error = {};
@@ -68,6 +69,8 @@ let router = createBrowserRouter([
               if (Object.keys(error).length > 0) return error;
 
               const newOrder = await createOrder(order);
+              // (we need to clear cart) hack is to import store and dispatch it
+              store.dispatch(clearCart());
               return redirect(`/order/${newOrder.id}`);
             },
           },
