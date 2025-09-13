@@ -62,3 +62,9 @@ export const getTotalCartQuantityAndPrice = createSelector(
     );
   },
 );
+export const getCurrentQuantityById = (id) => {
+  return (state) => {
+    const pizza = state.cart.cart.find((item) => item.pizzaId === id);
+    return pizza?.quantity;
+  };
+};
