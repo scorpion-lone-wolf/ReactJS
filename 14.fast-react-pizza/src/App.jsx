@@ -12,7 +12,12 @@ import Order from "./features/order/Order";
 
 import { Provider } from "react-redux";
 import { clearCart } from "./features/cart/cartSlice";
-import { createOrder, getMenu, getOrder } from "./services/apiRestaurant";
+import {
+  createOrder,
+  getMenu,
+  getOrder,
+  updateOrder,
+} from "./services/apiRestaurant";
 import { store } from "./store";
 import AppLayout from "./ui/AppLayout";
 import Error from "./ui/Error";
@@ -57,11 +62,13 @@ let router = createBrowserRouter([
             action: async ({ request }) => {
               const formData = await request.formData();
               const data = Object.fromEntries(formData);
+
               const order = {
                 ...data,
                 priority: data.priority === "true",
                 cart: JSON.parse(data.cart),
               };
+              console.log("new order", order);
               const error = {};
               if (!isValidPhone(order.phone)) {
                 error.phone = "please enter your correct phone number";
@@ -80,6 +87,16 @@ let router = createBrowserRouter([
             loader: async ({ params }) => {
               let order = await getOrder(params.orderId);
               return { order: order };
+            },
+            action: async ({ request }) => {
+              const order = await request.json();
+              console.log(order);
+              const updatedOrder = {
+                ...order,
+                priority: true,
+              };
+              await updateOrder(order.id, updatedOrder);
+              return null;
             },
             errorElement: <Error />,
           },

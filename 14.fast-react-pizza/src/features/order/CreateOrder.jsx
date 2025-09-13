@@ -81,7 +81,9 @@ function CreateOrder() {
             </p>
           )}
           {!position.latitude && !position.longitude && (
-            <span className="absolute top-9.5 right-[5px] sm:top-1.5 sm:right-48 md:top-0.5">
+            <span
+              className={`absolute top-9.5 right-[5px] -z-10 sm:top-1.5 ${addressError ? "sm:right-48" : ""} md:top-0.5`}
+            >
               <Button
                 disabled={isAddressLoading}
                 type="small"
