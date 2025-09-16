@@ -1,4 +1,8 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 import styled from "styled-components";
+import { deleteCabin } from "../../services/apiCabins";
+import { formatCurrency } from "../../utils/helpers";
 
 const TableRow = styled.div`
   display: grid;
@@ -38,3 +42,48 @@ const Discount = styled.div`
   font-weight: 500;
   color: var(--color-green-700);
 `;
+
+const CabinRow = ({ cabin }) => {
+  const { id, name, maxCapacity, regularPrice, discount, image } = cabin;
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationFn: id => deleteCabin(id),
+    // eslint-disable-next-line no-unused-vars
+    onSuccess: deletedCabin => {
+      toast.success("Cabin Successfully deleted");
+
+      // 1. First way to do is to invalidate
+      queryClient.invalidateQueries({ queryKey: ["cabins"] });
+
+      // 2. Second way to do is to directly updating the cache using setQueryData
+      // queryClient.setQueriesData(["cabins"], oldCabinsData => {
+      //   console.log("old data before delete", oldCabinsData);
+      //   return oldCabinsData
+      //     ? oldCabinsData.filter(cabinData => cabinData.id != deletedCabin.id)
+      //     : [];
+      // });
+    },
+    onError: err => {
+      toast.error(err.message);
+    },
+  });
+  return (
+    <TableRow role="row">
+      <Img src={image} />
+      <Cabin> {name}</Cabin>
+      <div>{maxCapacity}</div>
+      <Price>{formatCurrency(regularPrice)}</Price>
+      <Discount>{formatCurrency(discount)}</Discount>
+      <button
+        onClick={() => {
+          mutate(id);
+        }}
+        disabled={isPending}
+      >
+        {isPending ? "deleting..." : "delete"}
+      </button>
+    </TableRow>
+  );
+};
+
+export default CabinRow;
