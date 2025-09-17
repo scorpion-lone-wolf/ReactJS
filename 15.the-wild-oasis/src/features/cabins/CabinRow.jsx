@@ -1,10 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import toast from "react-hot-toast";
+import { HiPencil, HiTrash } from "react-icons/hi";
+import { HiSquare2Stack } from "react-icons/hi2";
 import styled from "styled-components";
-import { deleteCabin } from "../../services/apiCabins";
 import { formatCurrency } from "../../utils/helpers";
 import CreateCabinForm from "./CreateCabinForm";
+import useCreateCabin from "./useCreateCabin";
+import { useDeleteCabin } from "./useDeleteCabin";
 
 const TableRow = styled.div`
   display: grid;
@@ -47,29 +48,20 @@ const Discount = styled.div`
 
 const CabinRow = ({ cabin }) => {
   const [showForm, setShowForm] = useState(false);
-  const { id, name, maxCapacity, regularPrice, discount, image } = cabin;
-  const queryClient = useQueryClient();
-  const { mutate, isPending } = useMutation({
-    mutationFn: id => deleteCabin(id),
-    // eslint-disable-next-line no-unused-vars
-    onSuccess: deletedCabin => {
-      toast.success("Cabin Successfully deleted");
+  const { id, name, maxCapacity, regularPrice, discount, image, description } = cabin;
+  const { createCabinMutate, isCreating } = useCreateCabin();
+  const { deleteCabinMutate, isDeleting } = useDeleteCabin();
 
-      // 1. First way to do is to invalidate
-      queryClient.invalidateQueries({ queryKey: ["cabins"] });
-
-      // 2. Second way to do is to directly updating the cache using setQueryData
-      // queryClient.setQueriesData(["cabins"], oldCabinsData => {
-      //   console.log("old data before delete", oldCabinsData);
-      //   return oldCabinsData
-      //     ? oldCabinsData.filter(cabinData => cabinData.id != deletedCabin.id)
-      //     : [];
-      // });
-    },
-    onError: err => {
-      toast.error(err.message);
-    },
-  });
+  function handleDuplicate() {
+    createCabinMutate({
+      name: `Copy of ${name}`,
+      description,
+      maxCapacity,
+      regularPrice,
+      discount,
+      image,
+    });
+  }
   return (
     <>
       <TableRow role="row">
@@ -77,16 +69,21 @@ const CabinRow = ({ cabin }) => {
         <Cabin> {name}</Cabin>
         <div>{maxCapacity}</div>
         <Price>{formatCurrency(regularPrice)}</Price>
-        <Discount>{formatCurrency(discount)}</Discount>
+        {discount ? <Discount>{formatCurrency(discount)}</Discount> : <span>&mdash;</span>}
         <div>
-          <button onClick={() => setShowForm(!showForm)}>Edit</button>
+          <button onClick={handleDuplicate} disabled={isCreating}>
+            <HiSquare2Stack />
+          </button>
+          <button onClick={() => setShowForm(!showForm)}>
+            <HiPencil />
+          </button>
           <button
             onClick={() => {
-              mutate(id);
+              deleteCabinMutate(id);
             }}
-            disabled={isPending}
+            disabled={isDeleting}
           >
-            {isPending ? "deleting..." : "delete"}
+            <HiTrash />
           </button>
         </div>
       </TableRow>

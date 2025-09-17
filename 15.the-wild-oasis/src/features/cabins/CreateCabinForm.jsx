@@ -1,13 +1,12 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { createCabin, updateCabin } from "../../services/apiCabins";
 import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import Textarea from "../../ui/Textarea";
+import useCreateCabin from "./useCreateCabin";
+import useUpdateCabin from "./useUpdateCabin";
 
 function CreateCabinForm({ cabinToEdit = {} }) {
   const { id: editId, ...editValue } = cabinToEdit;
@@ -22,24 +21,9 @@ function CreateCabinForm({ cabinToEdit = {} }) {
     defaultValues: isEditSession ? editValue : {},
   });
 
-  const queryClinet = useQueryClient();
+  const { createCabinMutate, isCreating } = useCreateCabin();
 
-  const { mutate: createCabinMutate, isPending: isCreating } = useMutation({
-    mutationFn: createCabin,
-    onSuccess: () => {
-      toast.success("Cabin created successfully");
-      queryClinet.invalidateQueries({ queryKey: ["cabins"] });
-      reset();
-    },
-  });
-
-  const { mutate: updateCabinMutate, isPending: isUpdating } = useMutation({
-    mutationFn: ({ updatedCabin, id }) => updateCabin(updatedCabin, id),
-    onSuccess: () => {
-      toast.success("Cabin Edited successfully");
-      queryClinet.invalidateQueries({ queryKey: ["cabins"] });
-    },
-  });
+  const { updateCabinMutate, isUpdating } = useUpdateCabin();
 
   const isWorking = isCreating || isUpdating;
   return (
@@ -52,7 +36,15 @@ function CreateCabinForm({ cabinToEdit = {} }) {
             updatedCabin: { ...data, image: isImageUploaded ? data.image[0] : data.image },
             id: editId,
           });
-        else createCabinMutate({ ...data, image: data.image[0] });
+        else
+          createCabinMutate(
+            { ...data, image: data.image[0] },
+            {
+              onSuccess: () => {
+                reset();
+              },
+            }
+          );
       })}
     >
       <FormRow label="Cabin name" error={errors?.name?.message}>

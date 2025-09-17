@@ -2,11 +2,17 @@ import supabase from "./supabase";
 
 export async function createCabin(newCabin) {
   try {
-    const publicUrl = await uploadImageToSupabase(newCabin.image);
+    const isImageUpdated = typeof newCabin?.image !== "string";
+    let imagePublicUrl = "";
+    if (isImageUpdated) {
+      imagePublicUrl = await uploadImageToSupabase(newCabin.image);
+    } else {
+      imagePublicUrl = newCabin?.image;
+    }
     // insert cabin record
     const { data, error: cabinError } = await supabase
       .from("cabins")
-      .insert([{ ...newCabin, image: publicUrl }])
+      .insert([{ ...newCabin, image: imagePublicUrl }])
       .select();
     if (cabinError) throw new Error(cabinError.message);
     return data[0];
