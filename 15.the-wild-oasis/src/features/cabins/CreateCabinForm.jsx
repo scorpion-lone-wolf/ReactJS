@@ -8,7 +8,7 @@ import Textarea from "../../ui/Textarea";
 import useCreateCabin from "./useCreateCabin";
 import useUpdateCabin from "./useUpdateCabin";
 
-function CreateCabinForm({ cabinToEdit = {} }) {
+function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
   const { id: editId, ...editValue } = cabinToEdit;
   const isEditSession = Boolean(editId);
   const {
@@ -28,20 +28,29 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   const isWorking = isCreating || isUpdating;
   return (
     <Form
+      type={onCloseModal ? "modal" : "regular"}
       onSubmit={handleSubmit(data => {
         // check if new image is uplaod or not
         const isImageUploaded = typeof data.image !== "string";
         if (isEditSession)
-          updateCabinMutate({
-            updatedCabin: { ...data, image: isImageUploaded ? data.image[0] : data.image },
-            id: editId,
-          });
+          updateCabinMutate(
+            {
+              updatedCabin: { ...data, image: isImageUploaded ? data.image[0] : data.image },
+              id: editId,
+            },
+            {
+              onSuccess: () => {
+                onCloseModal?.();
+              },
+            }
+          );
         else
           createCabinMutate(
             { ...data, image: data.image[0] },
             {
               onSuccess: () => {
                 reset();
+                onCloseModal?.();
               },
             }
           );
@@ -49,6 +58,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
     >
       <FormRow label="Cabin name" error={errors?.name?.message}>
         <Input
+          autoComplete="off"
           type="text"
           id="name"
           disabled={isWorking}
@@ -58,6 +68,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 
       <FormRow label="Maximum capacity" error={errors?.maxCapacity?.message}>
         <Input
+          autoComplete="off"
           type="number"
           id="maxCapacity"
           disabled={isWorking}
@@ -70,6 +81,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 
       <FormRow label="Regular price" error={errors?.regularPrice?.message}>
         <Input
+          autoComplete="off"
           type="number"
           disabled={isWorking}
           id="regularPrice"
@@ -79,6 +91,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 
       <FormRow label="Discount" error={errors?.discount?.message}>
         <Input
+          autoComplete="off"
           type="number"
           id="discount"
           disabled={isWorking}
@@ -114,11 +127,19 @@ function CreateCabinForm({ cabinToEdit = {} }) {
       </FormRow>
 
       <FormRow>
-        {/* type is an HTML attribute! */}
-        <Button $variation="secondary" type="reset" disabled={isWorking}>
+        <Button
+          $variation="secondary"
+          type="reset"
+          disabled={isWorking}
+          onClick={() => {
+            // Conditionally calling the fn because this form migh not be used in a model.
+            // So call this fn is not passed will create an error
+            onCloseModal?.();
+          }}
+        >
           Cancel
         </Button>
-        <Button disabled={isWorking}> {isEditSession ? "Edit cabin" : "Add cabin"}</Button>
+        <Button disabled={isWorking}>{isEditSession ? "Edit cabin" : "Add cabin"}</Button>
       </FormRow>
     </Form>
   );
