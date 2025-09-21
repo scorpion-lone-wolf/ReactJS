@@ -51,7 +51,7 @@ const Discount = styled.div`
 
 const CabinRow = ({ cabin }) => {
   const { id, name, maxCapacity, regularPrice, discount, image, description } = cabin;
-  const { createCabinMutate, isCreating } = useCreateCabin();
+  const { createCabinMutate } = useCreateCabin();
   const { deleteCabinMutate, isDeleting } = useDeleteCabin();
 
   function handleDuplicate() {
