@@ -34,11 +34,25 @@ function filterCabinsData(cabins = [], filterWith = "all") {
 
   return cabins;
 }
+function sortCabinData(cabins = [], sortBy = "name-asc") {
+  const [field, direction] = sortBy.split("-");
+  const modifier = direction === "asc" ? 1 : -1;
+
+  return [...cabins].sort((a, b) => {
+    if (typeof a[field] === "number" && typeof b[field] === "number") {
+      return (a[field] - b[field]) * modifier;
+    }
+    return a[field].toString().localeCompare(b[field].toString()) * modifier;
+  });
+}
+
 export default function CabinsTables() {
   const [searchParams] = useSearchParams();
-  const discount = searchParams.get("discount");
   const { cabins, isLoading } = useCabins();
+  const discount = searchParams.get("discount");
   const filteredCabins = filterCabinsData(cabins, discount);
+  const sortBy = searchParams.get("sortBy") || "name-asc";
+  const sortedCabins = sortCabinData(filteredCabins, sortBy);
 
   if (isLoading) return <Spinner />;
   return (
@@ -53,7 +67,7 @@ export default function CabinsTables() {
           <div></div>
         </Table.Header>
         <Table.Body
-          data={filteredCabins}
+          data={sortedCabins}
           render={cabin => <CabinRow cabin={cabin} key={cabin.id} />}
         />
       </Table>
