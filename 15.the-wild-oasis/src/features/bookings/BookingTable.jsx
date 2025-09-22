@@ -7,8 +7,10 @@ import BookingRow from "./BookingRow";
 import useBookings from "./useBookings";
 
 function BookingTable() {
-  const { bookings, isPending } = useBookings();
+  const { data, isPending, isError, error } = useBookings();
   if (isPending) return <Spinner />;
+  if (isError) return <p>{error}</p>;
+  const { data: bookings, count } = data;
   if (!bookings.length) return <Empty resource="bookings" />;
   return (
     <Menus>
@@ -27,7 +29,7 @@ function BookingTable() {
           render={booking => <BookingRow key={booking.id} booking={booking} />}
         />
         <Table.Footer>
-          <Pagination totalCount={11} />
+          <Pagination totalCount={count} />
         </Table.Footer>
       </Table>
     </Menus>
