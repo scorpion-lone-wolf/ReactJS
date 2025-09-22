@@ -10,7 +10,7 @@ import useUpdateSettings from "./useUpdateSettings";
 function UpdateSettingsForm() {
   const { settingData, isLoading: settingLoading } = useSettings();
   const { updateSettingMutate, isUpdating: settingUpdating } = useUpdateSettings();
-  const { register, handleSubmit, reset } = useForm({
+  const { register, reset } = useForm({
     defaultValues: { ...settingData },
   });
 
