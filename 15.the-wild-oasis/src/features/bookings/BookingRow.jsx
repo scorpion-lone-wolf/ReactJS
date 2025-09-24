@@ -4,10 +4,12 @@ import styled from "styled-components";
 import Table from "../../ui/Table";
 import Tag from "../../ui/Tag";
 
-import { HiArrowDownOnSquare, HiEye } from "react-icons/hi2";
+import { HiArrowDownOnSquare, HiArrowUpOnSquare, HiEye, HiTrash } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 import Menus from "../../ui/Menus";
 import { formatCurrency, formatDistanceFromNow } from "../../utils/helpers";
+import useCheckout from "../check-in-out/useCheckout";
+import useDeleteBooking from "./useDeleteBooking";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -51,6 +53,9 @@ function BookingRow({
   },
 }) {
   const navigate = useNavigate();
+  const { checkout } = useCheckout();
+  const { deleteBookingData } = useDeleteBooking();
+
   const statusToTagName = {
     unconfirmed: "blue",
     "checked-in": "green",
@@ -91,7 +96,16 @@ function BookingRow({
           >
             see details
           </Menus.Button>
-
+          {status === "checked-in" && (
+            <Menus.Button
+              icon={<HiArrowUpOnSquare />}
+              onClick={() => {
+                checkout({ bookingId });
+              }}
+            >
+              Check Out
+            </Menus.Button>
+          )}
           {status === "unconfirmed" && (
             <Menus.Button
               icon={<HiArrowDownOnSquare />}
@@ -102,6 +116,15 @@ function BookingRow({
               Check In
             </Menus.Button>
           )}
+
+          <Menus.Button
+            icon={<HiTrash />}
+            onClick={() => {
+              deleteBookingData(bookingId);
+            }}
+          >
+            Delete
+          </Menus.Button>
         </Menus.List>
       </Menus.Menu>
     </Table.Row>

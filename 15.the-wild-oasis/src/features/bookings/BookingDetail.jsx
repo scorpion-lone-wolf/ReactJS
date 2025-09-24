@@ -10,8 +10,10 @@ import Tag from "../../ui/Tag";
 import { useNavigate } from "react-router-dom";
 import { useMoveBack } from "../../hooks/useMoveBack";
 import Spinner from "../../ui/Spinner";
+import useCheckout from "../check-in-out/useCheckout";
 import BookingDataBox from "./BookingDataBox";
 import useBooking from "./useBooking";
+import useDeleteBooking from "./useDeleteBooking";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -23,6 +25,8 @@ function BookingDetail() {
   const { booking, isLoading } = useBooking();
   const moveBack = useMoveBack();
   const navigate = useNavigate();
+  const { checkout } = useCheckout();
+  const { deleteBookingData } = useDeleteBooking();
   const statusToTagName = {
     unconfirmed: "blue",
     "checked-in": "green",
@@ -44,6 +48,15 @@ function BookingDetail() {
 
       <BookingDataBox booking={booking} />
       <ButtonGroup>
+        {status === "checked-in" && (
+          <Button
+            onClick={() => {
+              checkout({ bookingId });
+            }}
+          >
+            Check Out
+          </Button>
+        )}
         {status === "unconfirmed" && (
           <Button
             onClick={() => {
@@ -53,6 +66,16 @@ function BookingDetail() {
             Check In
           </Button>
         )}
+
+        <Button
+          $variation="danger"
+          onClick={() => {
+            deleteBookingData(bookingId);
+          }}
+        >
+          Delete
+        </Button>
+
         <Button $variation="secondary" onClick={moveBack}>
           Back
         </Button>
