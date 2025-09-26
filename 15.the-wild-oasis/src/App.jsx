@@ -1,16 +1,16 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Toaster } from "react-hot-toast";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Account from "./pages/Account";
+import Booking from "./pages/Booking";
 import Bookings from "./pages/Bookings";
 import Cabins from "./pages/Cabins";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
-import { default as PageNotFound, default as Users } from "./pages/PageNotFound";
-
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Toaster } from "react-hot-toast";
-import Booking from "./pages/Booking";
+import PageNotFound from "./pages/PageNotFound";
 import Settings from "./pages/Settings";
+import NewUsers from "./pages/Users";
 import GlobalStyles from "./styles/GlobalStyles";
 import AppLayout from "./ui/AppLayout";
 import Checkin from "./ui/Checkin";
@@ -45,7 +45,7 @@ const App = () => {
             <Route path="checkin/:bookingId" element={<Checkin />} />
 
             <Route path="cabins" element={<Cabins />} />
-            <Route path="users" element={<Users />} />
+            <Route path="users" element={<NewUsers />} />
 
             <Route path="settings" element={<Settings />} />
             <Route path="account" element={<Account />} />
