@@ -7,10 +7,9 @@ import BookingRow from "./BookingRow";
 import useBookings from "./useBookings";
 
 function BookingTable() {
-  const { bookings, isPending, isError, error, count } = useBookings();
-  if (isPending) return <Spinner />;
-  if (isError) return <p>{error}</p>;
+  const { bookings, isPending, count } = useBookings();
 
+  if (isPending) return <Spinner />;
   if (!bookings.length) return <Empty resource="bookings" />;
   return (
     <Menus>
